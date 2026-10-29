@@ -14,13 +14,14 @@ const menus = [
     children: [
       {
         name: 'Event List',
-        path: '/browse/events',
-        children: [{ name: 'Event Detail (Sample)', path: '/browse/events/1' }]
+        path: '/browse/events'
       },
-      { name: 'Category', path: '/browse/category' }
+      { name: 'Category', path: '/browse/category' },
+      { name: 'Your Events', path: '/browse/your-events' }
     ]
   },
-  { name: 'Contact', path: '/contact' }
+  { name: 'Contact', path: '/contact' },
+  { name: 'Organizer Dashboard', path: '/dashboard' }
 ]
 
 const handleScroll = () => {
@@ -39,7 +40,6 @@ onUnmounted(() => {
 <template>
   <nav class="navbar" :class="{ scrolled: isScrolled }">
     <div class="navbar-container">
-      <!-- Logo -->
       <router-link to="/" class="logo">
         <svg
           width="28"
@@ -49,9 +49,9 @@ onUnmounted(() => {
           xmlns="http://www.w3.org/2000/svg"
           class="logo-icon"
         >
-          <path d="M12 0L22.3923 6V18L12 24L1.6077 18V6L12 0Z" fill="white" />
+          <path d="M12 0L22.3923 6V18L12 24L1.60769 18V6L12 0Z" fill="white" />
           <path
-            d="M15 9.5 C15 9.5 14 8 12 8 C9.5 8 8 10 8 12.5 C8 15 9.5 17 12 17 C14 17 15 16 15.5 14.5 V 12.5 H 12.5"
+            d="M15 9.5 C15 9.5 14 8 12 8 C9.5 8 8 10 8 12.5 C8 15 9.5 17 12 17 C14 17 15 17 C15.5 16 15.5 14.5 V 12.5 H 12.5"
             stroke="#1A1643"
             stroke-width="2.5"
             stroke-linecap="round"
@@ -61,16 +61,14 @@ onUnmounted(() => {
         <span class="logo-text">Gatherly</span>
       </router-link>
 
-      <!-- Navigation Menu -->
       <ul class="nav-menu">
-        <li v-for="menu in menus" :key="menu.name" class="nav-item">
+        <li class="nav-item" v-for="menu in menus" :key="menu.name">
           <router-link
             :to="menu.path"
             class="nav-link"
             :class="{
               active:
-                route.path === menu.path ||
-                (menu.path !== '/' && route.path.startsWith(menu.path))
+                route.path === menu.path || (menu.path !== '/' && route.path.startsWith(menu.path)),
             }"
           >
             {{ menu.name }}
@@ -86,7 +84,7 @@ onUnmounted(() => {
               stroke-linecap="round"
               stroke-linejoin="round"
             >
-              <polyline points="6 9 12 15 18 9" />
+              <polyline points="6 9 12 15 18 9"></polyline>
             </svg>
           </router-link>
 
@@ -107,7 +105,7 @@ onUnmounted(() => {
                   stroke-linecap="round"
                   stroke-linejoin="round"
                 >
-                  <polyline points="9 18 15 12 9 6" />
+                  <polyline points="9 18 15 12 9 6"></polyline>
                 </svg>
               </router-link>
 
@@ -124,7 +122,6 @@ onUnmounted(() => {
         </li>
       </ul>
 
-      <!-- Right Actions (Language & Mobile Menu) -->
       <div class="nav-right">
         <div class="lang-selector">
           <svg
@@ -137,9 +134,11 @@ onUnmounted(() => {
             stroke-linecap="round"
             stroke-linejoin="round"
           >
-            <circle cx="12" cy="12" r="10" />
-            <line x1="2" y1="12" x2="22" y2="12" />
-            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="2" y1="12" x2="22" y2="12"></line>
+            <path
+              d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"
+            ></path>
           </svg>
           <span class="lang-text">EN</span>
           <svg
@@ -153,7 +152,7 @@ onUnmounted(() => {
             stroke-linejoin="round"
             class="chevron"
           >
-            <polyline points="6 9 12 15 18 9" />
+            <polyline points="6 9 12 15 18 9"></polyline>
           </svg>
         </div>
 
@@ -168,19 +167,18 @@ onUnmounted(() => {
             stroke-linecap="round"
             stroke-linejoin="round"
           >
-            <line x1="4" y1="12" x2="20" y2="12" />
-            <line x1="4" y1="6" x2="20" y2="6" />
-            <line x1="4" y1="18" x2="20" y2="18" />
+            <line x1="4" y1="12" x2="20" y2="12"></line>
+            <line x1="4" y1="6" x2="20" y2="6"></line>
+            <line x1="4" y1="18" x2="20" y2="18"></line>
           </svg>
         </button>
       </div>
     </div>
   </nav>
 </template>
+
 <style scoped>
-/* ==================================
-   NAVBAR BASE & CONTAINER
-   ================================== */
+/* NAVBAR FULL-WIDTH menyatu dengan bagian atas layar */
 .navbar {
   width: 100%;
   background: var(--nav-bg, #1c1948);
@@ -209,9 +207,6 @@ onUnmounted(() => {
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
 }
 
-/* ==================================
-   LOGO
-   ================================== */
 .logo {
   display: flex;
   align-items: center;
@@ -221,28 +216,21 @@ onUnmounted(() => {
   padding-right: 2rem;
   transition: transform 0.3s ease;
 }
-
 .logo:hover {
   transform: translateY(-2px);
 }
-
 .logo-icon {
   transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
-
 .logo:hover .logo-icon {
   transform: rotate(15deg) scale(1.1);
 }
-
 .logo-text {
   font-size: 1.15rem;
   font-weight: 700;
   letter-spacing: -0.01em;
 }
 
-/* ==================================
-   NAVIGATION MENU
-   ================================== */
 .nav-menu {
   display: flex;
   align-items: center;
@@ -280,12 +268,10 @@ onUnmounted(() => {
   font-weight: 600;
   box-shadow: 0 4px 15px rgba(102, 68, 255, 0.3);
 }
-
 .nav-link.active:hover {
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(102, 68, 255, 0.5);
 }
-
 .nav-link:not(.active):hover {
   background-color: rgba(255, 255, 255, 0.1);
   transform: translateY(-2px);
@@ -294,20 +280,21 @@ onUnmounted(() => {
 .dropdown-indicator {
   transition: transform 0.3s ease;
 }
-
 .nav-item:hover .dropdown-indicator {
   transform: rotate(180deg);
 }
 
 /* ==================================
    DROPDOWN & SUBMENU STYLES
+   Inspired by user reference image
    ================================== */
 .dropdown-menu {
-  display: none;
+  display: none; /* diubah jadi block saat hover */
   position: absolute;
   top: 100%;
   left: 0;
-  background-color: #d8d8d8;
+
+  background-color: #d8d8d8; /* warna abu seperti referensi */
   min-width: 200px;
   list-style: none;
   padding: 0;
@@ -323,7 +310,7 @@ onUnmounted(() => {
 }
 
 .dropdown-item {
-  position: relative;
+  position: relative; /* relative untuk submenu absolut */
 }
 
 .dropdown-link {
@@ -332,14 +319,16 @@ onUnmounted(() => {
   align-items: center;
   padding: 12px 20px;
   text-decoration: none;
-  color: #333;
+  color: #333; /* text gelap */
   font-size: 0.95rem;
-  transition: background-color 0.2s, color 0.2s;
+  transition:
+    background-color 0.2s,
+    color 0.2s;
   border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 .dropdown-link:hover {
-  background-color: #c4c4c4;
+  background-color: #c4c4c4; /* efek hover lebih gelap sedikit */
   color: #000;
 }
 
@@ -369,15 +358,25 @@ onUnmounted(() => {
   animation: fadeIn 0.2s ease-out;
 }
 
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 /* ==================================
-   RIGHT SECTION & ACTION BUTTONS
+   RIGHT SECTION
    ================================== */
 .nav-right {
   display: flex;
   align-items: center;
   gap: 1.5rem;
 }
-
 .lang-selector {
   display: flex;
   align-items: center;
@@ -390,20 +389,16 @@ onUnmounted(() => {
   border-radius: 8px;
   transition: all 0.3s ease;
 }
-
 .lang-selector:hover {
   background: rgba(255, 255, 255, 0.1);
 }
-
 .lang-selector:hover .chevron {
   transform: translateY(2px);
 }
-
 .chevron {
   transition: transform 0.3s ease;
   margin-top: 2px;
 }
-
 .hamburger-btn {
   display: flex;
   align-items: center;
@@ -417,24 +412,9 @@ onUnmounted(() => {
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
-
 .hamburger-btn:hover {
   background: rgba(255, 255, 255, 0.15);
   transform: scale(1.05);
-}
-
-/* ==================================
-   ANIMATIONS & MEDIA QUERIES
-   ================================== */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-5px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
 
 @media (max-width: 900px) {
@@ -442,9 +422,10 @@ onUnmounted(() => {
     gap: 1rem;
   }
 }
-
 @media (max-width: 768px) {
-  .nav-menu,
+  .nav-menu {
+    display: none;
+  }
   .lang-selector {
     display: none;
   }
