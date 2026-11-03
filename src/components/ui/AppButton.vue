@@ -1,48 +1,74 @@
+<template>
+  <button
+    :type="type"
+    :class="['app-button', `btn-${variant}`, { 'btn-loading': loading }]"
+    :disabled="disabled || loading"
+    @click="$emit('click', $event)"
+  >
+    <span v-if="loading" class="btn-spinner"></span>
+    <slot />
+  </button>
+</template>
+
 <script setup>
 defineProps({
   variant: {
     type: String,
-    default: 'primary'
+    default: 'primary' // 'primary', 'secondary', 'outline'
   },
   type: {
     type: String,
     default: 'button'
+  },
+  disabled: {
+    type: Boolean,
+    default: false
+  },
+  loading: {
+    type: Boolean,
+    default: false
   }
-})
-</script>
+});
 
-<template>
-  <button :type="type" :class="['app-button', `btn-${variant}`]">
-    <slot />
-  </button>
-</template>
+defineEmits(['click']);
+</script>
 
 <style scoped>
 .app-button {
   font-size: 1.1rem;
   font-weight: 600;
   text-decoration: none;
-  padding: 12px 24px;
+  padding: var(--space-3) var(--space-8);
   border-radius: 12px;
   border: none;
   cursor: pointer;
   display: inline-block;
   text-align: center;
-  transition: transform 0.2s, background-color 0.25s;
+  transition: transform 0.2s, background-color 0.2s;
 }
 
-.app-button:hover {
+.app-button:hover:not(:disabled) {
   transform: translateY(-2px);
 }
 
+.app-button:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-loading {
+  cursor: wait;
+}
+
 .btn-primary {
-  background-color: var(--primary, #6644ff);
+  background-color: var(--primary);
   color: white;
   box-shadow: 0 8px 20px rgba(102, 68, 255, 0.3);
 }
 
 .btn-primary:hover {
-  background-color: var(--primary-hover, #5533ee);
+  background-color: var(--primary-hover);
 }
 
 .btn-secondary {
@@ -56,8 +82,8 @@ defineProps({
 
 .btn-outline {
   background-color: transparent;
-  color: var(--primary, #6644ff);
-  border: 1px solid var(--primary, #6644ff);
+  color: var(--primary);
+  border: 1px solid var(--primary);
 }
 
 .btn-outline:hover {
