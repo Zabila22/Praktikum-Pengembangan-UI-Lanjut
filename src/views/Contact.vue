@@ -138,7 +138,7 @@ color: #333;
 font-weight: 600;
 }
 
-. form-control {
+.form-control {
 width: 100%;
 padding: 1rem;
 border: 1px solid #ddd;
@@ -150,7 +150,7 @@ font-family: inherit;
 
 }
 
-. form-control:focus {
+.form-control:focus {
 border-color: #6644ff;
 }
 
